@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ❗ Вставь СВОЙ токен от МойСклад:
-const MOYSKLAD_TOKEN = '5453be5ce53e63c53d827847374c16636f12e003';
+const MOYSKLAD_TOKEN = '2d78833f3b1c2d5c8d15e48ddc3b7386a91a1ec2';
 
 app.get('/api/search', async (req, res) => {
   const query = req.query.q;
