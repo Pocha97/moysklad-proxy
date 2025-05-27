@@ -1,13 +1,11 @@
 {
   "name": "moysklad-proxy",
   "version": "1.0.0",
-  "description": "Прокси к API МойСклад",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "node-fetch": "^3.3.2"
+    "cross-fetch": "^3.1.5"  // Вместо node-fetch
   }
 }
