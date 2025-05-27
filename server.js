@@ -1,11 +1,12 @@
 const express = require('express');
-const fetch = require('cross-fetch');
+const fetch = require('cross-fetch'); // или node-fetch
 const app = express();
+
+// Получаем порт и токен из окружения
 const PORT = process.env.PORT || 3000;
+const MOYSKLAD_TOKEN = process.env.MOYSKLAD_TOKEN;
 
-// ❗ Вставь СВОЙ токен от МойСклад:
-const MOYSKLAD_TOKEN = 'e8320dad39a7d569c5dd72955373dada79747a77';
-
+// API-маршрут
 app.get('/api/search', async (req, res) => {
   const query = req.query.q;
   if (!query) return res.json([]);
@@ -20,18 +21,24 @@ app.get('/api/search', async (req, res) => {
     });
 
     if (!response.ok) {
-      console.error(`Ошибка от МойСклад: ${response.statusText}`);
+      console.error(`❌ Ошибка от МойСклад: ${response.status} ${response.statusText}`);
       return res.status(500).json({ error: 'Ошибка API МойСклад' });
     }
 
     const data = await response.json();
-    res.json(data.rows || []);
+    const results = (data.rows || []).map(product => ({
+      name: product.name,
+      buyPrice: product.buyPrice?.value ? product.buyPrice.value / 100 : 0
+    }));
+
+    res.json(results);
   } catch (e) {
-    console.error(`💥 Ошибка: ${e.message}`);
-    res.status(500).json({ error: 'Внутренняя ошибка', details: e.message });
+    console.error(`💥 Ошибка сервера: ${e.message}`);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
   }
 });
 
+// Запуск сервера
 app.listen(PORT, () => {
   console.log(`✅ Сервер запущен на порту ${PORT}`);
 });
